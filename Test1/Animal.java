@@ -1,3 +1,5 @@
+package Test1;
+
 public class Animal {
     public int age;
 
