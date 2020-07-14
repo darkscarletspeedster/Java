@@ -28,4 +28,12 @@ public class Customer {
     public int getDecisionTime () {
         return decisionTime;
     }
+
+    public void decrementDecisionTime () {
+        decisionTime--;
+    }
+
+    public void updateInHandCash(double moneySpent) {
+        inHandCash -= moneySpent;
+    }
 }

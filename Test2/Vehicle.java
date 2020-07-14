@@ -1,5 +1,7 @@
 package Test2;
 
+import java.util.*;
+
 public class Vehicle {
     private String companyName;
     private String model;
@@ -29,8 +31,30 @@ public class Vehicle {
         return count;
     }
 
-    public void sellVehicle(Customer customer, Employee employee) {
+    public int sellVehicle(Customer customer, Employee employee) {
+        System.out.println("Enter quantity (Available-" + this.count + ") each pricing at ₹" + price + " : ");
+        Scanner sc = new Scanner(System.in);
+        int value = 0;
+        while (true) {
+            value = sc.nextInt();
+            if (value <= count) {
+                while (true) {
+                    if (customer.getInHandCash() < value * price) {
+                        System.out.println("Sorry you can't buy these many cars, select less cars: ");
+                        value = sc.nextInt();
+                    } else
+                        break;
+                }
+                break;
+            } else {
+                System.out.println("Please Enter Valid number!!!");
+            }
+        }
 
+        customer.updateInHandCash(value*price);
+        employee.updateEmployee(value);
+        count -= value;
+        return value;
     }
 
 }

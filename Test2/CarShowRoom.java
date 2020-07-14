@@ -9,7 +9,7 @@ public class CarShowRoom {
         Stack<Customer> customers = new Stack<>();
         HashSet<String> deliverableCity = new HashSet<>();
         double minCarValue = 0;
-        HashMap<String, Integer> busyMap = new HashMap<>();
+        HashMap<Employee, Customer> busyMap = new HashMap<>();
 
         vehicles.add(new Vehicle("Tesla", "T1", 100000000, 5));
         vehicles.add(new Vehicle("Ford", "Fv2", 10000000, 10));
@@ -62,7 +62,7 @@ public class CarShowRoom {
                 if (customer != null) {
                     if (busyMap.size() != employees.size()) {
                         Employee employee = getEmployee(employees);
-                        busyMap.put(employee.getEmployeeCode(), customer.getDecisionTime());
+                        busyMap.put(employee, customer);
                         System.out.println("Employee assigned to Customer.");
                     } else {
                         System.out.println("Customer has to wait as all employees are busy!!!");
@@ -77,37 +77,73 @@ public class CarShowRoom {
                             int experience = sc.nextInt();
                             employees.add(new Employee(employeeName, employeeCode, experience));
                             Employee employee = getEmployee(employees);
-                            busyMap.put(employee.getEmployeeCode(), customer.getDecisionTime());
+                            busyMap.put(employee, customer);
                             System.out.println("Employee assigned to Customer.");
                         } else {
                             System.out.println("Ok. Customer waits.");
+                            customers.push(customer);
                         }
                     }
                 }
-
-                for (Map.Entry<String, Integer> entry : busyMap.entrySet()) {
-                    busyMap.put(entry.getKey(), entry.getValue() - 1);
-                    int value = busyMap.get(entry.getKey());
-                    if (value == 0) {
-                        System.out.println("Select Model: ");
-                        for (int i = 0; i < vehicles.size(); i++) {
-                            Vehicle vehicle = vehicles.get(i);
-                            if (vehicle.getCount() != 0)
-                                System.out
-                                        .println((i + 1) + ". " + vehicle.getCompanyName() + " " + vehicle.getModel());
-                        }
-                        Vehicle vehicle = null;
-                        while (true) {
-                            int model = sc.nextInt();
-                            if (model <= vehicles.size() && model > 0) {
-                                vehicle = vehicles.get(model - 1);
-                                break;
-                            } else {
-                                System.out.println("No such model available");
-                            }
-                        }
-                        vehicle.sellVehicle(customer, employee);
+            }
+            ArrayList<Employee> toRemove = new ArrayList<>();
+            for (Map.Entry<Employee, Customer> entry : busyMap.entrySet()) {
+                entry.getValue().decrementDecisionTime();
+                if (entry.getValue().getDecisionTime() == 0) {
+                    System.out.println("Mr/Miss/Mrs " + entry.getValue().getName() + " Please Select a Model: ");
+                    for (int i = 0; i < vehicles.size(); i++) {
+                        Vehicle vehicle = vehicles.get(i);
+                        if (vehicle.getCount() != 0)
+                            System.out.println((i + 1) + ". " + vehicle.getCompanyName() + " " + vehicle.getModel());
                     }
+                    Vehicle vehicle = null;
+                    while (true) {
+                        int model = sc.nextInt();
+                        if (model <= vehicles.size() && model > 0) {
+                            vehicle = vehicles.get(model - 1);
+                            if (entry.getValue().getInHandCash() < vehicle.getPrice()) {
+                                System.out.print("You can't buy this model, you don't have enough cash!!!!!!");
+                            } else {
+                                break;
+                            }
+                        } else{
+                            System.out.println("No such model available");
+                        }
+                    }
+                    int carsbought = vehicle.sellVehicle(entry.getValue(), entry.getKey());
+                    if (vehicle.getCount() == 0)
+                        vehicles.remove(vehicle); 
+
+                    System.out.println(entry.getValue().getName() + " bought " + carsbought + " car(s) of Company "
+                            + vehicle.getCompanyName() + " and it's model " + vehicle.getModel()
+                            + " with the help of our Employee " + entry.getKey().getName() + " customer remaining cash: " + entry.getValue().getInHandCash());
+                    toRemove.add(entry.getKey());
+                }
+            }
+
+            for (int i = 0; i < toRemove.size(); i++) {
+                Employee employee = toRemove.get(i);
+                if (customers.size() != 0) {
+                    busyMap.put(employee, customers.pop());
+                } else {
+                    busyMap.remove(employee);
+                }
+            }
+
+            if (busyMap.size() == 0) {
+                System.out.println("Do you want to Exit?Yes(Y/y) or No(N/n): ");
+                c = sc.next().charAt(0);
+                if (c == 'Y' || c == 'y')
+                    break;
+            } else {
+                System.out.println("Present scenario: ");
+                System.out.println("Customers being attended: " + busyMap.size());
+                System.out.println("Customers in queue: " + customers.size());
+                System.out.println("Total cars available: ");
+                for (int i = 0; i < vehicles.size(); i++) {
+                    Vehicle vehicle = vehicles.get(i);
+                    System.out.println((i + 1) + ". " + vehicle.getCompanyName() + " " + vehicle.getModel() + " count: "
+                            + vehicle.getCount());
                 }
             }
         }
@@ -116,6 +152,7 @@ public class CarShowRoom {
 
     private static Employee getEmployee(ArrayList<Employee> employees) {
         Collections.sort(employees);
+        Collections.reverse(employees);
         for (int i = 0; i < employees.size(); i++) {
             Employee employee = employees.get(i);
             if (!employee.isBusy) {

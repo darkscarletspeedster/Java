@@ -37,4 +37,10 @@ public class Employee implements Comparable<Employee> {
         else
             return 0;
     }
+
+    public void updateEmployee(int carsSold) {
+        totalCarsSold += carsSold;
+        incentive = totalCarsSold*10000;
+        experience = experience + (carsSold/10);
+    }
 }
