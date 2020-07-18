@@ -28,6 +28,10 @@ public class Employee implements Comparable<Employee> {
         return (int) Math.floor(experience);
     }
 
+    public double getIncentive() {
+        return incentive;
+    }
+
     @Override
     public int compareTo(Employee o) {
         if (this.experience > o.experience)

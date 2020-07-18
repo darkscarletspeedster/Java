@@ -147,6 +147,13 @@ public class CarShowRoom {
                 }
             }
         }
+        System.out.println("Each Employees Incentive and Experience: ");
+        for (int i = 0; i < employees.size(); i++) {
+            Employee employee = employees.get(i);
+            System.out.println(employee.getEmployeeCode() + ": " + employee.getName() +
+            " Experience gathered: " + employee.getExperience() + " incentives accumilated: " + employee.getIncentive());
+        }
+        System.out.println("Bye!!!!!!");
         sc.close();
     }
 
