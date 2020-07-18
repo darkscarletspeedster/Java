@@ -54,6 +54,7 @@ public class Vehicle {
         customer.updateInHandCash(value*price);
         employee.updateEmployee(value);
         count -= value;
+        sc.close();
         return value;
     }
 
