@@ -1,4 +1,4 @@
-package Tets5GenericsPractise;
+package Test5GenericsPractise;
 
 public class Employee {
     public void doWork() {

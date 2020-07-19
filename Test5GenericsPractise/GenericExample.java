@@ -1,4 +1,4 @@
-package Tets5GenericsPractise;
+package Test5GenericsPractise;
 
 import java.util.ArrayList;
 import java.util.HashSet;

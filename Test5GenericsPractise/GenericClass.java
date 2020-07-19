@@ -1,4 +1,4 @@
-package Tets5GenericsPractise;
+package Test5GenericsPractise;
 
 public class GenericClass<T /*extends Employee*/,U,V> { // a type can be extended as well just like wildcard '?'
     T itemT;
