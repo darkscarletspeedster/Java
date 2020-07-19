@@ -1,4 +1,10 @@
-package Test4;
+package Test4CollectionsPractice;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeSet;
 
 // provides example for hashcode and equal function override for a custom object
 public class HashCodeAndEqualOverride {
@@ -7,10 +13,38 @@ public class HashCodeAndEqualOverride {
         String a = "kshitij";
         String b = "kshitij";
         System.out.println(a == b); //true
+
+        ArrayList<Test> tests = new ArrayList<>();
+        Collections.sort(tests); // test can be sorted as it implements comparable interface
+
+        // Tree sets are useful storing data in sorted order according to keys
+        // TreeMaps work in similar fashion for hashmap keys
+        // For complex objects in TreeSet/TreeMap the object class should implement complarable interface
+        TreeSet<Test> sets = new TreeSet<>();
+        Test test = new Test();
+        test.name = "Kshitij";
+        sets.add(test);
+        test = new Test();
+        test.name = "Anuj";
+        sets.add(test);
+        for (Test value : sets) {
+            System.out.println(value);
+        }
+
+
+        // LinkedHashMap and LinkedHashSet are used to use hashmaps/hashsets to store data in the order of their insertion
+        LinkedHashMap<String, Test> linkedHashMap = new LinkedHashMap<>();
+        linkedHashMap.put(test.name, test);
+        test = new Test();
+        test.name = "kshtitij";
+        linkedHashMap.put(test.name, test);
+        for (Map.Entry<String, Test> entry : linkedHashMap.entrySet()) {
+            System.out.println(entry.getKey() + " " + entry.getValue());
+        }
     }
 }
 
-class Test {
+class Test implements Comparable<Test> {
     String name;
     boolean check;
     float frac;
@@ -62,5 +96,17 @@ class Test {
         if (num != other.num)
             return false;
         return true;
+    }
+
+    @Override
+    public int compareTo(Test o) {
+        return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public String toString() {
+        // is used to get a better printed view of objects rather than default view of their hashcodes
+        return "Test [bigFrac=" + bigFrac + ", bigNum=" + bigNum + ", c=" + c + ", check=" + check + ", frac=" + frac
+                + ", name=" + name + ", num=" + num + "]";
     }
 }

@@ -1,4 +1,4 @@
-package Test1;
+package Test1BasicsAndInheritenceAndPolymerisation;
 
 public class Dog extends Animal{
     public Dog () {

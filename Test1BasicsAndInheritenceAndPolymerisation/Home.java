@@ -1,4 +1,4 @@
-package Test1;
+package Test1BasicsAndInheritenceAndPolymerisation;
 
 public class Home {
     public static void main(final String[] args) {

@@ -1,4 +1,4 @@
-package Test2;
+package Test2ObjectOrientationExample;
 
 public class Customer {
     private String name;

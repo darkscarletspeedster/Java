@@ -1,4 +1,4 @@
-package Test2;
+package Test2ObjectOrientationExample;
 
 import java.lang.Math;
 
