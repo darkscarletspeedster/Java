@@ -1,13 +1,20 @@
 package Test6Threading;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public class Producer implements Runnable {
     List<Integer> items;
     final private int LIMIT = 5;
+    BlockingQueue<Integer> queueItems;
+    private int item;
 
     public Producer(List<Integer> items) {
         this.items = items;
+    }
+
+    public Producer(BlockingQueue<Integer> queueItems) {
+        this.queueItems = queueItems;
     }
 
     public void produceItems(int item) throws InterruptedException {
@@ -36,20 +43,42 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
-        for (int i = 0; i < 20; i++) {
+        if (items != null) {
+            for (int i = 0; i < 20; i++) {
+                try {
+                    produceItems(i);
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             try {
-                produceItems(i);
-                Thread.sleep(500);
+                Thread.sleep(15000);
+                produceItems(Integer.MAX_VALUE);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        try {
-            Thread.sleep(15000);
-            produceItems(Integer.MAX_VALUE);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if (queueItems != null) {
+            while (true) {
+                synchronized(this) {
+                    try {
+                        queueItems.put(getNextItem());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (item == 20)
+                    break;
+            }
         }
+    }
+
+    private int getNextItem() {
+        int itemInc = item++;
+        System.out.println("Add item: " + itemInc);
+        return itemInc;
     }
 }

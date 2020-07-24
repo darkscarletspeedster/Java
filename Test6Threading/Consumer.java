@@ -1,12 +1,18 @@
 package Test6Threading;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public class Consumer implements Runnable {
     List<Integer> items;
+    BlockingQueue<Integer> queueItems;
 
     public Consumer(List<Integer> items) {
         this.items = items;
+    }
+
+    public Consumer(BlockingQueue<Integer> queueItems) {
+        this.queueItems = queueItems;
     }
 
     public void processItems() throws InterruptedException {
@@ -23,14 +29,33 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
-            try {
-                processItems();
-                Thread.sleep(2500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (items != null) {
+            while (true) {
+                try {
+                    processItems();
+                    Thread.sleep(2500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
+            }
+        }
+
+        if (queueItems != null) {
+            while (true) {
+                synchronized (this) {
+                    try {
+                        Thread.sleep(1000);
+                        System.out.println("Processed Item: " + queueItems.take());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (queueItems.isEmpty())
+                    break;
+            }
+            System.out.println("All Questions Processed!!!!");
         }
     }
 }
