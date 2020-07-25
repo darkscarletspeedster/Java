@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class Consumer implements Runnable {
-    List<Integer> items;
-    BlockingQueue<Integer> queueItems;
+    private List<Integer> items;
+    private BlockingQueue<Integer> queueItems;
 
     public Consumer(List<Integer> items) {
         this.items = items;

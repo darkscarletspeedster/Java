@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class Producer implements Runnable {
-    List<Integer> items;
+    private List<Integer> items;
     final private int LIMIT = 5;
-    BlockingQueue<Integer> queueItems;
+    private BlockingQueue<Integer> queueItems;
     private int item;
 
     public Producer(List<Integer> items) {

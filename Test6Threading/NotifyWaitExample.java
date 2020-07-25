@@ -22,6 +22,7 @@ public class NotifyWaitExample {
         }
 
         // using ArrayBlockingQueue for same problem
+        // it takes care of notify and wait internally
         if (runMethod == 2) {
             BlockingQueue<Integer> queueItems = new ArrayBlockingQueue<>(5);
 
